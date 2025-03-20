@@ -4,8 +4,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Building..'
-                // Add your build steps here
+                sh './mvnw clean package -DskipTests'
             }
         }
 
