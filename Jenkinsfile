@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    tools{
+        maven 'Maven 3'
+    }
 
     stages {
         stage('Build') {
@@ -10,8 +13,12 @@ pipeline {
 
         stage('Test') {
             steps {
-                echo 'Testing..'
-                // Add your test steps here
+                sh 'mvn test'
+            }
+        }
+        stage('Run Integration Tests'){
+            steps{
+                sh 'mvn verify'
             }
         }
 
