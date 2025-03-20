@@ -8,13 +8,13 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh './mvnw clean package -DskipTests'
+                sh 'mvn -s settings.xml clean package -DskipTests'
             }
         }
 
         stage('Test') {
             steps {
-                sh 'mvn test'
+                sh 'mvn -s settings.xml test'
             }
         }
         stage('Run Integration Tests'){
