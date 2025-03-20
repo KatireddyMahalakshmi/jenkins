@@ -1,17 +1,25 @@
 pipeline {
     agent any
+    tools{
+        maven 'maven-3'
+        jdk 'jdk17'
+    }
 
     stages {
         stage('Build') {
             steps {
-                sh './mvnw clean package -DskipTests'
+                sh 'mvn -s settings.xml clean package -DskipTests'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Testing..'
-                // Add your test steps here
+                sh 'mvn -s settings.xml test'
+            }
+        }
+        stage('Run Integration Tests'){
+            steps{
+                sh 'mvn verify'
             }
         }
 
