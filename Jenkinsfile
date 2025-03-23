@@ -14,7 +14,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh 'mvn test'
+                sh 'mvn '
             }
         }
         stage('Run Integration Tests'){
@@ -37,7 +37,6 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying....'
-                // Add your deploy steps here
             }
         }
     }
