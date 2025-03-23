@@ -41,4 +41,25 @@ pipeline {
             }
         }
     }
+    post {
+        always {
+            emailext body: '''${SCRIPT, template="groovy-html.template"}''',
+                subject: "${currentBuild.currentResult}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                to: 'your-email@gmail.com',
+                replyTo: 'your-email@gmail.com',
+                mimeType: 'text/html'
+        }
+        success {
+            emailext body: "The build was successful. Check console output at ${env.BUILD_URL}",
+                subject: "Success: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                to: 'your-email@gmail.com',
+                replyTo: 'your-email@gmail.com'
+        }
+        failure {
+            emailext body: "The build failed. Check console output at ${env.BUILD_URL}",
+                subject: "Failed: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                to: 'your-email@gmail.com',
+                replyTo: 'your-email@gmail.com'
+        }
+    }
 }
