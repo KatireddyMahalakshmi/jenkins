@@ -45,11 +45,12 @@ pipeline {
         always {
             script {
                 try {
-                    // Attempt to send email
-                    emailext body: "Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':\n\nStatus: ${currentBuild.result}\n\nCheck console output at ${env.BUILD_URL} to view the results.",
-                             subject: "${currentBuild.result}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                             to: "katireddymahalakshmi@gmail.com"
-                    
+                    emailext (
+                        subject: '${DEFAULT_SUBJECT}',
+                        body: '${DEFAULT_CONTENT}',
+                        recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
+                        to: 'katireddymahalakshmi@gmail.com'
+                    )
                     echo "Email sent successfully"
                 } catch (e) {
                     echo "Failed to send email: ${e.message}"
