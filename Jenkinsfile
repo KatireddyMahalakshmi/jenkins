@@ -43,23 +43,25 @@ pipeline {
     }
     post {
         always {
-            emailext body: '''${SCRIPT, template="groovy-html.template"}''',
-                subject: "${currentBuild.currentResult}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                to: 'katireddymahalakshmi@gmail.com',
-                replyTo: 'katireddymahalakshmi@gmail.com',
-                mimeType: 'text/html'
+            script {
+                try {
+                    // Attempt to send email
+                    emailext body: "Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':\n\nStatus: ${currentBuild.result}\n\nCheck console output at ${env.BUILD_URL} to view the results.",
+                             subject: "${currentBuild.result}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                             to: "katireddymahalakshmi@gmail.com"
+                    
+                    echo "Email sent successfully"
+                } catch (e) {
+                    echo "Failed to send email: ${e.message}"
+                    echo "Stack trace: ${e.stackTrace.join('\n')}"
+                }
+            }
         }
         success {
-            emailext body: "The build was successful. Check console output at ${env.BUILD_URL}",
-                subject: "Success: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                to: 'katireddymahalakshmi@gmail.com',
-                replyTo: 'katireddymahalakshmi@gmail.com'
+            echo 'This will run only if successful'
         }
         failure {
-            emailext body: "The build failed. Check console output at ${env.BUILD_URL}",
-                subject: "Failed: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                to: 'katireddymahalakshmi@gmail.com',
-                replyTo: 'katireddymahalakshmi@gmail.com'
+            echo 'This will run only if failed'
         }
     }
 }
